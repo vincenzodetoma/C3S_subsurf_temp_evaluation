@@ -16,12 +16,29 @@ lon = ds.lon
 Nlat = len(lat)
 Nlon = len(lon)
 depthvar = ds.depth
-idx = len(depthvar.sel(depth=slice(0, float(depth))))
+idx = len(depthvar.sel(depth=slice(0, float(depth))))+1 if depth=='300' else len(depthvar.sel(depth=slice(0, float(depth))))
+dz = dm['e3t_1d'].squeeze()
+lev=float(depth)
+dz2 = dz.copy()
+if(depth!='1'):
+  if(lev>dz[:idx].sum()):
+    nlt = len(ds.depth)
+  else:
+    zt = 0
+    for l in range(len(ds.depth)):
+      zt = zt + dz[l]
+      if(zt <lev):
+        nlt = l
+        ztf = zt
+    nlt = nlt +1
+    dz2[nlt] = lev - ztf
+
 var = ds[variable].isel(depth=slice(0,idx))
-dz = dm['e3t_1d'].isel(depth=slice(0, idx))
+dz2 = dz2.isel(depth=slice(0, idx))
 w = np.cos(lat*np.pi/180.)
 h_av = var.weighted(w).mean(dim=['lat', 'lon'])
-globmean = h_av.weighted(dz).mean(dim='depth')
+globmean = var.weighted(w*dz2).mean(dim=['lat', 'lon', 'depth'])
+print(year, month, depth, globmean.values)
 
 globmean = globmean.rename(variable+depth)
 globmean.to_netcdf(dest_path+'tmp/'+year+'/glob_'+variable+'_'+depth+'m_ORCA-0.25x0.25_regular_'+year+month+'.nc')

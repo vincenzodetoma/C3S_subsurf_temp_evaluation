@@ -15,3 +15,6 @@ fig = plt.figure(1, figsize=(15,8))
 ax = fig.add_subplot(111)
 p = var.plot(ax=ax, color='k')
 fig.savefig(surf_path+'/Figures/globmean_'+variable+'_'+depth+'m_ORCA-0.25x0.25_regular_1979_2018.png', dpi=300, transparent=True)
+plt.show()
+
+
