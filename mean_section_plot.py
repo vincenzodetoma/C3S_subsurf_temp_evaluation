@@ -14,9 +14,9 @@ ds = xr.open_dataset(surf_path+'/Results/'+variable+'_'+section+'_ORCA-0.25x0.25
 var = ds[variable].mean(dim='time').squeeze().rename(variable + r' $[^oC]$')
 colors='YlOrRd'
 if (section=='A3'):
-  xname='lat'
+  xname='longitude'
 else:
-  xname='lon'
+  xname='latitude'
 
 mask = xu.isnan(var)
 fig = plt.figure(1, figsize=(15,8))
