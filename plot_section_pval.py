@@ -14,9 +14,9 @@ ds = xr.open_dataset(surf_path+'/Results/pvalue_'+variable+'_'+section+'_ORCA-0.
 var = ds[variable+'_trend_pvalue'].squeeze().rename(variable+' pvalue % ')
 colors='Greens'
 if(section=='A3'):
-  xname = 'lat'
+  xname = 'loongitude'
 else:
-  xname = 'lon'
+  xname = 'latitude'
 
 mask = xu.isnan(var)
 fig = plt.figure(1, figsize=(15,8))
